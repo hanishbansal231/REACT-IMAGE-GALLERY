@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import GalleryCard from "../GalleryCard/GalleryCard";
 import './Gallery.css';
 function Gallery() {
-    const [galleryData, setGalleryData] = useState(undefined);
+    const [galleryData, setGalleryData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const GALLERY_URL = 'https://api.slingacademy.com/v1/sample-data/photos';
     async function fetchGalleryImage() {
         setIsLoading(true);
-        const response = await axios.get('https://api.slingacademy.com/v1/sample-data/photos'); // Fetch Data
+        const response = await axios.get(GALLERY_URL); // Fetch Data
         // console.log(response?.data);
         const galleryResult = response?.data?.photos?.map((item) => item)
         // console.log(galleryResult);
@@ -24,7 +25,7 @@ function Gallery() {
             {isLoading
                 ?
                 (
-                    <div class="custom-loader"></div>
+                    <div className="custom-loader"></div>
                 )
                 :
 
