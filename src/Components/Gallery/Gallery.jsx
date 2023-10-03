@@ -5,7 +5,8 @@ import './Gallery.css';
 function Gallery() {
     const [galleryData, setGalleryData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const GALLERY_URL = 'https://api.slingacademy.com/v1/sample-data/photos';
+    const [limit, setLimit] = useState(10);
+    const GALLERY_URL = `https://api.slingacademy.com/v1/sample-data/photos?offset=1&limit=${limit}`;
     async function fetchGalleryImage() {
         setIsLoading(true);
         const response = await axios.get(GALLERY_URL); // Fetch Data
@@ -18,21 +19,28 @@ function Gallery() {
     console.log(galleryData);
     useEffect(() => {
         fetchGalleryImage();
-    }, []);
+    }, [limit]);
 
     return (
-        <div className="gallery-wrapper">
-            {isLoading
-                ?
-                (
-                    <div className="custom-loader"></div>
-                )
-                :
+        <div className="outer-wrapper">
+            <div className="gallery-wrapper">
+                {isLoading
+                    ?
+                    (
+                        <div className="custom-loader"></div>
+                    )
+                    :
 
-                galleryData && galleryData.map((item) => (
-                    <GalleryCard key={item?.id} id={item?.id} image={item?.url} />
-                ))
-            }
+                    galleryData && galleryData.map((item) => (
+                        <GalleryCard key={item?.id} id={item?.id} image={item?.url} />
+                    ))
+                }
+
+            </div>
+            <div className="gallery-btns">
+                <button className="btn" disabled={limit === 10} onClick={() => setLimit((prev) => prev - 10)}>Prev</button>
+                <button className="btn" disabled={limit === 100} onClick={() => setLimit((prev) => prev + 10)}>Next</button>
+            </div>
         </div>
     );
 }
